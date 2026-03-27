@@ -1,0 +1,45 @@
+{{ form_start(form) }}
+        {% for widget in form %}
+            <div class="form-group">
+                {% if widget.vars.block_prefixes[1] not in  ['hidden','repeated']  %}
+                    <label class="block">
+                        {{ form_label(widget) }}{{ (widget.vars.required) ? ' *' : '' }}
+
+                        {% if widget.vars.name == "type" %}
+                            {% set fullname = widget.vars.full_name %}
+                            {% set href = path('neptune_type_add',{'type':app.request.attributes.get('type')}) %}
+                            {% if fullname == "element_form[type]"  %}
+                                <a href="{{ href }}" class="ajax add"><i class="fa fa-plus text-success m-l-5"></i> </a>
+
+                            {% else %}
+                                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                    <a href="{{ href }}" class="ajax add"><i class="fa fa-plus text-success m-l-5"></i> </a>
+                                {% endif %}
+                            {% endif %}
+
+                        {% endif %}
+                    </label>
+                {% endif %}
+                {% if widget.vars.block_prefixes[1] == 'choice' and widget.vars.expanded != true %}
+                    {% set select2 = ' select2' %}
+                {% else %}
+                    {% set select2 = '' %}
+                {% endif %}
+                {% if widget.vars.attr.class is defined %}
+                    {% set class = ' '~widget.vars.attr.class %}
+                {% else %}
+                    {% set class = '' %}
+                {% endif %}
+
+
+                {{ form_widget(widget,{'attr':{'class':((widget.vars.block_prefixes[1] != 'repeated') ?'form-control'~select2~class : 'repeated')}}) }}
+
+                {% if widget.vars.block_prefixes[1] != 'submit' and widget.vars.block_prefixes[1] != 'hidden' %}
+                    {{ form_errors(widget) }}
+                {% endif %}
+            </div>
+        {% endfor %}
+        {{ form_rest(form) }}
+        {{ form_errors(form) }}
+<button type="submit" class="btn">Valider</button>
+{{ form_end(form) }}

@@ -1,0 +1,39 @@
+{% extends app.request.XmlHttpRequest  ? '@ScyLabsNeptune/admin/ajax.html.twig' : '@ScyLabsNeptune/admin/layout.html.twig'%}
+
+
+{% block css %}
+    <link href="{{ asset('bundles/scylabsneptune/admin/css/lib/select2/select2.min.css') }}" rel="stylesheet">
+{% endblock css %}
+
+{% block js %}
+    <script src="{{ asset('bundles/scylabsneptune/admin/js/lib/select2/select2.full.min.js') }}"></script>
+    <script src="{{ asset('bundles/scylabsneptune/admin/js/lib/select2/select2-init.js') }}"></script>
+    <script src="{{ asset('bundles/scylabsneptune/admin/js/codex/codex.js') }}"></script>
+{% endblock js %}
+
+{% block content %}
+    <div class="box_codex">
+        <div class="filter">
+            Filtrer :
+            <select class="select2" multiple>
+                {% for category in categories %}
+                    <option value=".{{ category.name | clean }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="listing_zones_codex row">
+            {% for zone in zones %}
+                <div class="zone col-lg-4 {% for category in zone.categories %}{{ category.name | clean }} {% endfor %}" data-id="{{ zone.id }}" data-token="{{ app.user.apiToken  }}" data-name="{{ zone.name }}" data-codexurl="{{ codexUrl }}" data-downloadlink="{{ path('codex_import',{'id':zone.id}) }}">
+                    <a href="{{ path('codex_delete',{'id':zone.id}) }}" class="ajax delete">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                    <div class="box_photo">
+                        <i class="number">{{ zone.id }}</i>
+                        <img src="{{ zone.thumbnail }}"/>
+
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}

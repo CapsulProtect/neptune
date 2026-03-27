@@ -1,0 +1,12 @@
+{% extends app.request.XmlHttpRequest ? '@ScyLabsNeptune/admin/ajax.html.twig' : '@ScyLabsNeptune/admin/layout.html.twig' %}
+
+{% block js %}
+
+{% endblock js %}
+
+
+{% block content %}
+
+    {% include '@ScyLabsNeptune/admin/type/content_listing.html.twig' %}
+
+{% endblock content %}

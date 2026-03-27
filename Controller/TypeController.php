@@ -1,0 +1,175 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: alexa
+ * Date: 11/06/2018
+ * Time: 16:30
+ */
+
+namespace ScyLabs\NeptuneBundle\Controller;
+
+
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
+
+class TypeController extends BaseController
+{
+
+    /**
+     * @Route("/{type}/type/add",name="neptune_type_add",requirements={"type"="[a-zA-Z-]{2,20}"})
+     */
+    public function add(Request $request,$type){
+
+        $classType = $type.'Type';
+        $class = $this->getClass($classType,$formClass);
+        if($class === null){
+            return $this->redirectToRoute('neptune_home');
+        }
+
+
+        $route = $this->generateUrl('neptune_type_add',array('type'=>$type));
+        $params = array("title"=>"Ajout d'un type de ".$type);
+
+        $em = $this->getDoctrine()->getManager();
+
+
+
+        $types = $em->getRepository($class)->findByRemove(0);
+
+
+
+
+        $params['types'] = $types;
+
+        // Génération du fil d'ariane
+
+        $ariane = array(
+            [
+                'link'=>$this->generateUrl('neptune_home'),
+                'name'=>'Accueil'
+            ],
+            [
+                'link'=>$this->generateUrl('neptune_type',array('type'=>$type)),
+                'name'=>'Types de '.$type.'s'
+            ],
+            [
+                'link'=>'#',
+                'name'=>'Créer'
+            ]
+        );
+        $params['ariane'] = $ariane;
+        if(true === $result = $this->validForm($classType,$formClass,new $class(),$request,$form,$route)){
+            if($request->isXmlHttpRequest()){
+                return $this->json(array('success'=>true,'message'=>'Votre '.ucfirst($type).' à bien été ajouté'));
+            }
+            return $this->redirectToRoute('neptune_type',array('type'=>$type));
+        }
+        else{
+            if($result !== false){
+                return $this->json($result);
+            }
+            $params['form'] = $form->createview();
+            return $this->render('@ScyLabsNeptune/admin/type/add.html.twig',$params);
+        }
+
+    }
+
+    /**
+     * @Route("/{type}/type",name="neptune_type",requirements={"type"="[a-zA-Z-]{2,20}"})
+     */
+    public function list(Request $request,$type){
+        $classType = $type.'Type';
+        $class = $this->getClass($classType);
+
+        if($class === null){
+            return $this->redirectToRoute('neptune_home');
+        }
+        $types = $this->getDoctrine()->getRepository($class)->findByRemove(false);
+
+
+        $params = array(
+            'title' =>  'Pages',
+            'types' => $types
+        );
+
+        // Génération du fil d'ariane
+        $ariane = array(
+            [
+                'link'=>$this->generateUrl('neptune_home'),
+                'name'=>'Accueil'
+            ],
+            [
+                'link'=>'#',
+                'name'=>'Types de '.$type.'s'
+            ]
+        );
+        $params['ariane'] = $ariane;
+
+        return $this->render('@ScyLabsNeptune/admin/type/listing.html.twig',$params);
+    }
+
+    /**
+     * @Route("/{type}/type/{id}",name="neptune_type_edit",requirements={"id"="[0-9]+","type"="[a-zA-Z-]{2,20}"})
+     */
+    public function edit(Request $request,$id,$type){
+        $classType = $type.'Type';
+        $class = $this->getClass($classType,$formClass);
+        if($class === null){
+            return $this->redirectToRoute('neptune_home');
+        }
+        $repo = $this->getDoctrine()->getRepository($class);
+        $oType = $repo->find($id);
+
+        if(null === $oType){
+            return $this->redirectToRoute('neptune_type',array('type'=>$type));
+        }
+        $types = $repo->findBy(array(
+            'remove'=>false,
+        ));
+        $params = array(
+            'title' => "Modification du type de ".$type." : ".$oType->getName(),
+            'types' => $types
+        );
+
+        $route = $this->generateUrl('neptune_type_edit',['id'=>$oType->getId(),'type'=>$type]);
+
+        if($this->validForm($classType,$formClass,$oType,$request,$form,$route) === true){
+
+            $this->get('session')->getFlashBag()->add('notice',"Votre type de page à bien été modifié");
+            return $this->redirectToRoute('neptune_type',array('type'=>$type));
+        }
+        else{
+            $params['form'] = $form->createView();
+            return $this->render('@ScyLabsNeptune/admin/type/add.html.twig',$params);
+        }
+    }
+
+    /**
+     * @Route("/{type}/type/delete/{id}",name="neptune_type_remove",requirements={"id"="[0-9]+","type"="[a-zA-Z-]{2,20}"})
+     */
+    public function remove(Request $request,$id,$type){
+        $classType = $type.'Type';
+        $class = $this->getClass($classType);
+        if($class === null){
+            return $this->redirectToRoute('neptune_home');
+        }
+        $repo = $this->getDoctrine()->getRepository($class);
+
+        $oType = $repo->find($id);
+
+        if(null === $oType ||( is_object($oType) && $oType->getRemovable() === false)){
+            $this->redirectToRoute('neptune_type');
+        }
+        $em = $this->getDoctrine()->getManager();
+        $oType->setRemove(true);
+        $em->persist($oType);
+        $em->flush();
+        
+        if($request->isXmlHttpRequest()){
+            return $this->json(array('success'=>true,'message'=>'Votre '.ucfirst($type).' à bien été supprimé'));
+        }
+        return $this->redirect($request->headers->get('referer'));
+
+    }
+}

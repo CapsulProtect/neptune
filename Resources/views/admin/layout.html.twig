@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image.jpg') }}" sizes="16x16" href="{{ asset('bundles/scylabsneptune/admin/images/favicon.jpg') }}">
+    <title>Neptune</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="{{ asset('bundles/scylabsneptune/admin/css/lib/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{{ asset('bundles/scylabsneptune/admin/css/lib/select2/select2.min.css') }}" rel="stylesheet">
+
+    <link href="{{ asset('bundles/scylabsneptune/admin/css/lib/calendar2/semantic.ui.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/scylabsneptune/admin/css/lib/calendar2/pignose.calendar.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/scylabsneptune/admin/css/lib/owl.carousel.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('bundles/scylabsneptune/admin/css/lib/owl.theme.default.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('bundles/scylabsneptune/admin/css/helper.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/scylabsneptune/admin/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/scylabsneptune/admin/css/lib/font-awesome/css/fontawesome-all.min.css') }}" rel="stylesheet">
+    <link type="text/css" href="{{ asset('bundles/scylabsneptune/admin/css/custom.less') }}" rel="stylesheet/less">
+    <link href="{{ asset('bundles/scylabsneptune/admin/css/lib/nestable/nestable.css') }}" rel="stylesheet">
+
+    <script src="{{ asset('bundles/scylabsneptune/admin/js/lib/tinymce/tinymce.min.js') }}"></script>
+    <script src="{{ asset('bundles/scylabsneptune/admin/js/tinyinit.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('bundles/scylabsneptune/admin/css/lib/dropzone/dropzone.css') }}"/>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:** -->
+    <!--[if lt IE 9]>
+<!--
+    <script src="https:**oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js') }}"></script>
+    <script src="https:**oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js') }}"></script>
+-->
+
+    {% block css %}
+    {% endblock %}
+
+    <![endif]-->
+</head>
+
+<body class="fix-header fix-sidebar">
+
+<!-- Preloader - style you can find in spinners.css -->
+<div class="preloader">
+    <svg class="circular" viewBox="25 25 50 50">
+        <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
+</div>
+
+
+<!-- Main wrapper  -->
+<div id="main-wrapper">
+
+    <!-- Left Sidebar  -->
+    <div class="left-sidebar">
+        <!-- Sidebar scroll-->
+        <div class="scroll-sidebar">
+            <!-- Sidebar navigation-->
+            <nav class="sidebar-nav">
+                <ul id="sidebarnav">
+                    {{ include('@ScyLabsNeptune/admin/basemenu.html.twig') }}
+                </ul>
+            </nav>
+            <!-- End Sidebar navigation -->
+        </div>
+        <!-- End Sidebar scroll-->
+    </div>
+    <!-- End Left Sidebar  -->
+    <!-- Page wrapper  -->
+    <div class="page-wrapper">
+        <!-- Bread crumb -->
+         {% if title is defined %}
+        <div class="row page-titles">
+            <div class="col-md-5 align-self-center">
+                {# <div class="burger">{% include('svg/burger.svg') %}</div> #}
+                <h3 class="">
+                    {% if title is defined%}
+                        {{ title }}
+                    {% else %}
+                       
+                    {% endif %}
+                </h3>
+            </div>
+            <div class="col-md-7 align-self-center">
+                <!-- FIL DARIANE-->
+                <ol class="breadcrumb">
+                    {% if ariane is defined %}
+                        {% for ligne in ariane %}
+                            <li class="breadcrumb-item"><a href="{{ ligne.link }}">{{ ligne.name }}</a></li>
+                        {% endfor %}
+                    {% endif %}
+                </ol>
+            </div>
+        </div>
+        {% endif %}
+        <!-- CONTENU DE LA PAGE -->
+        <div class="container-fluid">
+
+            {% block content %}
+            {% endblock %}
+
+        </div>
+    </div>
+    <!-- End Page wrapper  -->
+</div>
+
+<div id="flashes">
+    {% for flash in app.session.flashbag.get('notice') %}
+        <div class="flash dialog alert alert-success alert-dismissible fade show">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true"><i class="fa fa-times"></i></span>
+            </button>
+            <p>{{ flash }}</p>
+
+        </div>
+    {% endfor %}
+</div>
+{% if is_granted('ROLE_SUPER_ADMIN') %}
+    <div id="keyup">
+
+    </div>
+{% endif %}
+
+
+<!-- End Wrapper -->
+<!-- All Jquery -->
+<script src="{{ asset('bundles/scylabsneptune/admin/js/lib/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('bundles/scylabsneptune/admin/js/lib/less/less.min.js') }}"></script>
+<script src="{{ asset('bundles/scylabsneptune/admin/js/lib/jquery-ui/jquery-ui.min.js') }}"></script>
+<!-- Bootstrap tether Core JavaScript -->
+<script src="{{ asset('bundles/scylabsneptune/admin/js/lib/bootstrap/js/popper.min.js') }}"></script>
+<script src="{{ asset('bundles/scylabsneptune/admin/js/lib/bootstrap/js/bootstrap.min.js') }}"></script>
+<!-- slimscrollbar scrollbar JavaScript -->
+<script src="{{ asset('bundles/scylabsneptune/admin/js/jquery.slimscroll.js') }}"></script>
+<!--Menu sidebar -->
+<script src="{{ asset('bundles/scylabsneptune/admin/js/sidebarmenu.js') }}"></script>
+<!--stickey kit -->
+<script src="{{ asset('bundles/scylabsneptune/admin/js/lib/sticky-kit-master/dist/sticky-kit.min.js') }}"></script>
+
+
+<script src="{{ asset('bundles/scylabsneptune/admin/js/lib/nestable/jquery.nestable.js') }}"></script>
+<!-- scripit init-->
+<script src="{{ asset('bundles/scylabsneptune/admin/js/lib/nestable/nestable.init.js') }}"></script>
+
+<script src={{ asset('bundles/scylabsneptune/admin/js/lib/datatables/datatables.min.js') }}></script>
+<script src={{ asset('bundles/scylabsneptune/admin/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js') }}></script>
+<script src={{ asset('bundles/scylabsneptune/admin/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js') }}></script>
+<script src={{ asset('bundles/scylabsneptune/admin/js/lib/datatables/cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js') }}></script>
+<script src={{ asset('bundles/scylabsneptune/admin/js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js') }}></script>
+<script src={{ asset('bundles/scylabsneptune/admin/js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js') }}></script>
+<script src={{ asset('bundles/scylabsneptune/admin/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js') }}></script>
+<script src={{ asset('bundles/scylabsneptune/admin/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js') }}></script>
+<script src={{ asset('bundles/scylabsneptune/admin/js/lib/datatables/datatables-init.js') }}></script>
+<script src="{{ asset('bundles/scylabsneptune/admin/js/lib/dropzone/dropzone.js') }}"></script>
+<script src="{{ asset('bundles/scylabsneptune/admin/js/gallery.js') }}"></script>
+<script src="{{ asset('bundles/scylabsneptune/admin/js/lib/select2/select2.full.min.js') }}"></script>
+<script src="{{ asset('bundles/scylabsneptune/admin/js/lib/select2/select2-init.js') }}"></script>
+
+
+<!--Custom JavaScript -->
+
+
+<!-- scripit init-->
+
+
+
+{% block js %}
+{% endblock js %}
+
+<script>
+    var url_site = "{{ asset('') }}";
+    var url_asset = "{{ asset('bundles/scylabsneptune') }}";
+    var url_changelog = "{{ path('neptune_changelogs') }}";
+</script>
+<script src="{{ asset('bundles/scylabsneptune/admin/js/scripts.js') }}"></script>
+<script src="{{ asset('bundles/scylabsneptune/admin/js/custom.js') }}"></script>
+<script src="{{ asset('bundles/scylabsneptune/admin/js/ajax.js') }}"></script>
+<script src="{{ asset('bundles/scylabsneptune/admin/js/egs.js') }}"></script>
+<script src="{{ asset('bundles/scylabsneptune/admin/js/changelogs.js') }}"></script>
+
+</body>
+
+</html>

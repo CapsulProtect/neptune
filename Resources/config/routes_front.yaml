@@ -1,0 +1,13 @@
+#routes_front.yaml
+
+neptune_sitemap:
+    resource: ../../Controller/Front/SitemapController.php
+    type: annotation
+    
+neptune_photo:
+    resource: ../../Controller/PhotoController.php
+    type: annotation
+
+neptune_front:
+    resource: ../../Controller/Front/PageController.php
+    type: annotation

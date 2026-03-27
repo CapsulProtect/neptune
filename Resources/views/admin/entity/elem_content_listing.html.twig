@@ -1,0 +1,127 @@
+{% import '@ScyLabsNeptune/admin/entity/macros.html.twig' as recursiveMacro %}
+<!-- Start Page Content -->
+<div class="row">
+    <div class="col-lg-{{  (app.request.attributes.get('_route') == 'neptune_entity') ? '10' : '12'}}">
+        {% if objects is defined %}
+            <div class="tabs">
+                <ul class="onglets tabalt">
+                    {% for type in objects %}
+                        <li><a href="#tabs-{{ type.name }}" data-type="{{ type.id }}">{{ type.title }}</a></li>
+                    {% endfor %}
+
+                </ul>
+                {% for type in objects %}
+
+                        <div class="tabs ui-tabs ui-corner-all ui-widget ui-widget-content" id="tabs-{{ type.name }}">
+                            <ul class="onglets">
+                                <li><a href="#tabs-{{ type.name }}-1">Gestion</a></li>
+                                <li><a href="#tabs-{{ type.name }}-2">Tri</a></li>
+                            </ul>
+                            <div id="tabs-{{ type.name }}-1">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <table id="myTable" class="table table-bordered table-striped dataTable no-footer" role="grid" aria-describedby="myTable_info">
+                                            <thead>
+                                            <th>Actif</th>
+                                            <th>Type</th>
+                                            <th>Nom</th>
+                                            <th>Prio</th>
+                                            <th>Actions</th>
+                                            </thead>
+                                            <tbody>
+                                            {% if type.elements.count() > 0  %}
+                                                {% for object in type.elements({'remove':false}) %}
+
+                                                        <tr>
+                                                            <td>
+                                                                <a href="{{ path('neptune_entity_active',{'id':object.id,'type':app.request.attributes.get('type')}) }}" class="ajax active">
+                                                                    {% if object.active %}
+                                                                        <i class="fa fa-check text-success" title="Désactiver"></i>
+                                                                    {% else %}
+                                                                        <i class="fa fa-times text-danger" title="Activer"></i>
+                                                                    {% endif %}
+                                                                </a>
+                                                            </td>
+                                                            {% if object.type is defined %}
+                                                                <td>{{ object.type.name }}</td>
+                                                            {% endif %}
+                                                            <td>{{ object.name }}</td>
+                                                            <td>{{ object.prio }}</td>
+                                                            <td>
+                                                                <ul class="actions">
+                                                                    <li><a href="{{ path('neptune_entity_clone',{'type':app.request.attributes.get('type'),'id':object.id}) }}" class="ajax clone" title="Dupliquer"><i class="far fa-clone"></i><span class="action">Cloner</span></a></li>
+                                                                    <li><a href="{{ path('neptune_file_gallery_prio',{'type':app.request.attributes.get('type'),'id':object.id}) }}" class="ajax" title="Médias"><i class="far fa-image"></i><span class="action">Médias</span></a></li>
+                                                                    <li><a href="{{ path('neptune_detail',{'type':app.request.attributes.get('type'),'id':object.id}) }}" class="ajax edit" title="Textes"><i class="far fa-font"></i><span class="action">Textes</span></a></li>
+                                                                    {% if object.zones is defined %}
+                                                                        <li><a href="{{ path('neptune_entity',{'type':'zone','parentType':app.request.attributes.get('type'),'parentId':object.id}) }}" class="ajax" title="Zones"><i class="far fa-th"></i><span class="action">Zones</span></a></li>
+                                                                    {% endif %}
+                                                                    <li><a href="{{ path('neptune_entity_edit',{'id':object.id,'type':app.request.attributes.get('type')}) }}" class="ajax edit" title="Editer"><i class="far fa-pen"></i><span class="action">Editer</span></a></li>
+                                                                    <li class="">
+                                                                        <a class="ajax delete" data-id="{{ object.id }}" href="{{ path('neptune_entity_remove',{'id':object.id,'type':app.request.attributes.get('type') }) }}" title="Supprimer">
+                                                                           <i class="fas fa-times"></i>
+                                                                           <span class="action">Supprimer</span>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </td>
+                                                        </tr>
+                                                {% endfor %}
+                                            {% endif %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="tabs-{{ type.name }}-2">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">Définir l'ordre des éléments</h4>
+                                        <div class="card-content">
+                                            <div class="">
+                                                <div class="dd nestable{{ app.request.attributes.get('type') == 'page' ? '' : '1'}}" id="nestable{{ app.request.attributes.get('type') == 'page' ? '' : '1'}}" data-action="{{ path('neptune_entity_prio',{'type':app.request.attributes.get('type')}) }}">
+                                                    <ol class="dd-list">
+                                                        {% if type.elements.count() > 0  %}
+                                                            {% for object in type.elements %}
+                                                                {% if app.request.attributes.get('type') == 'page' %}
+                                                                    {{ recursiveMacro.recursivePage(object,loop.first) }}
+                                                                {% else %}
+                                                                    <li class="dd-item" data-id="{{ object.id }}">
+                                                                        <div class="dd-handle">
+                                                                            <a href="{{ path('neptune_entity_active',{'id':object.id,'type':app.request.attributes.get('type')}) }}" class="ajax active">
+                                                                                {% if object.active %}
+                                                                                    <i class="fa fa-check text-success" title="Désactiver"></i>
+                                                                                {% else %}
+                                                                                    <i class="fa fa-times text-danger" title="Activer"></i>
+                                                                                {% endif %}
+                                                                            </a>
+                                                                            {{ object.name }}
+                                                                        </div>
+                                                                    </li>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </ol>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    {% if app.request.attributes.get('_route') == 'neptune_entity' %}
+        <div class="col-lg-2 m-t-0">
+   
+                <a href="{{ path('neptune_entity_add',{'type':app.request.attributes.get('type')}) }}" class="btn btn-pink m-b-10 m-l-5 show_form ajax add">Ajouter un element</a>
+
+        </div>
+    {% endif %}
+</div>
+<!-- End page Content -->

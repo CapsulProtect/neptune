@@ -1,0 +1,36 @@
+neptune_main: 
+    resource: ../../Controller/MainController.php
+    type: annotation
+neptune_codex:
+    resource: ../../Controller/CodexController.php
+    type: annotation
+
+neptune_cloning:
+    resource: ../../Controller/CloningController.php
+    type: annotation
+
+neptune_export:
+    resource: ../../Controller/ExportController.php
+    type: annotation
+neptune_import:
+    resource: ../../Controller/ImportController.php
+    type: annotation
+neptune_user:
+    resource: ../../Controller/UserController.php
+    type: annotation
+neptune_type:
+    resource: ../../Controller/TypeController.php
+    type: annotation
+neptune_infos:
+    resource: ../../Controller/InfosController.php
+    type: annotation
+neptune_detail:
+    resource: ../../Controller/DetailController.php
+    type: annotation
+neptune_file:
+    resource: ../../Controller/FileController.php
+    type: annotation
+neptune_entity:
+    resource: ../../Controller/EntityController.php
+    type: annotation
+
