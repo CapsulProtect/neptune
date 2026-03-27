@@ -26,14 +26,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 use Symfony\Component\Translation\Translator;
 use Twig\Environment;
+use Symfony\Bundle\TwigBundle\Controller\ExceptionController;
 
-class TwigExceptionController implements ContainerAwareInterface
+class TwigExceptionController extends ExceptionController implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
     
     public function __construct(Environment $twig, bool $debug){
     
-        parent::__construct($twig, $debug);
+        // parent::__construct($twig, $debug);
     }
 
     public function showException(Request $request, FlattenException $exception, DebugLoggerInterface $logger = null){
