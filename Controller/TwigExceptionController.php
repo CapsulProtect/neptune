@@ -36,15 +36,22 @@ class TwigExceptionController implements ContainerAwareInterface
         // parent::__construct($twig, $debug);
     }
 
-    public function showException(Request $request, FlattenException $exception, DebugLoggerInterface $logger = null){
-        if($this->debug == false){
-
+    public function showException(Request $request, FlattenException $exception, DebugLoggerInterface $logger = null)
+    {
+        // Si on n'est PAS en mode debug (PROD)
+        if (!$this->debug) {
+            // Redirection 301 vers la homepage
             return new RedirectResponse(
-                $this->container->get('router')->generate('homepage',array(
+                $this->container->get('router')->generate('homepage', [
                     '_locale' => $request->getLocale()
-                )),
-                301);
+                ]),
+                301
+            );
         }
-        return parent::showAction($request,$exception,$logger);
+
+        // Si on EST en mode debug (DEV), on ne fait RIEN.
+        // Symfony détectera qu'aucun Response n'est retourné et utilisera
+        // son propre gestionnaire d'erreurs (le ErrorListener).
+        return null; 
     }
 }
