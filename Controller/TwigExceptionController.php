@@ -26,9 +26,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 use Symfony\Component\Translation\Translator;
 use Twig\Environment;
-use Symfony\Bundle\TwigBundle\Controller\ExceptionController;
 
-class TwigExceptionController extends ExceptionController implements ContainerAwareInterface
+class TwigExceptionController implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
     
